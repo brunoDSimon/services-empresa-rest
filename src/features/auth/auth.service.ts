@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { Auth } from './entities/auth.entity';
@@ -17,12 +17,7 @@ export class AuthService {
   async create({cpf,email,name,password,role}: CreateAuthDto) {
     let pwt = await bcrypt.hash(password,await bcrypt.genSalt())
     password = pwt
-    return this.authRepository.create({
-      cpf,
-      email,
-      name,
-      role
-    })
+    return this.authRepository.create({cpf,email,name,password,role})
   }
 
   findAll() {

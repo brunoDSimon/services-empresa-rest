@@ -1,5 +1,8 @@
 import { Column, Entity, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
+@Entity({
+    name: `auth`
+})
 export class Auth {
     @PrimaryColumn()
     id: number
@@ -15,9 +18,7 @@ export class Auth {
     @Column()
     password: string
 
-    @Column({
-        length:11
-    })
+    @Column()
     cpf: number
 
     @Column()
