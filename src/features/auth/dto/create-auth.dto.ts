@@ -41,9 +41,9 @@ export class CreateAuthDto {
     @ApiProperty({
         example: 66293704061,
         required: true,
-        maxLength:11,
         description: 'CPF valido'
     })
-    @IsNumber()
-    cpf:number
+
+    @IsString()
+    cpf:string
 }

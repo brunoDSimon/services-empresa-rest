@@ -21,7 +21,7 @@ import { PedidosModule } from './features/pedidos/pedidos.module';
       password: "root",
       maxQueryExecutionTime:3000,
       entities: [Auth],
-      synchronize: true
+      synchronize: true,
     }),
     ThrottlerModule.forRoot([
       {
@@ -31,9 +31,9 @@ import { PedidosModule } from './features/pedidos/pedidos.module';
       },
     ]),
     AuthModule, 
-    // forwardRef(()=> UsuariosModule),
-    // forwardRef(()=> EmpresasModule),
-    // forwardRef(()=> PedidosModule),
+    forwardRef(()=> UsuariosModule),
+    forwardRef(()=> EmpresasModule),
+    forwardRef(()=> PedidosModule),
   ],
   controllers: [AppController],
   providers: [AppService,

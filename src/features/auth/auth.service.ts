@@ -14,14 +14,17 @@ export class AuthService {
   ) {
 
   }
-  async create({cpf,email,name,password,role}: CreateAuthDto) {
-    let pwt = await bcrypt.hash(password,await bcrypt.genSalt())
-    password = pwt
-    return this.authRepository.create({cpf,email,name,password,role})
+  async create(dto: CreateAuthDto) {
+    let pwt = await bcrypt.hash(dto.password,await bcrypt.genSalt())
+    dto.password = pwt
+    let pedido = await this.authRepository.create(dto)
+    console.log(pedido)
+    return  this.authRepository.save(dto)
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async findAll() {
+    const dados = await this.authRepository.find()
+    return  dados
   }
 
   findOne(id: number) {

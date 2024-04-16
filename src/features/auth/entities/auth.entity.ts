@@ -1,10 +1,11 @@
-import { Column, Entity, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({
     name: `auth`
 })
 export class Auth {
     @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     id: number
 
     @Column({
@@ -18,8 +19,10 @@ export class Auth {
     @Column()
     password: string
 
-    @Column()
-    cpf: number
+    @Column({
+        length:11
+    })
+    cpf: string
 
     @Column()
     role: number

@@ -11,15 +11,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post()
-  @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
-  @ApiResponse({ status: 403, description: 'Forbidden.'})
-  @ApiBody({
-    type: CreateAuthDto,
-    description: 'Json structure for user object',
- })
-  create(@Body() createAuthDto: CreateAuthDto, @Res() res: Response) {
-   
-    return   this.authService.create(createAuthDto);
+  create(@Body() createAuthDto: CreateAuthDto) {
+    return this.authService.create(createAuthDto);
   }
 
   @Get()
