@@ -34,4 +34,9 @@ export class AuthController {
   remove(@Param('id') id: string) {
     return this.authService.remove(+id);
   }
+
+  @Post('authentication')
+  authentication(@Body() {email, senha}) {
+    return this.authService.login(email, senha)
+  }
 }

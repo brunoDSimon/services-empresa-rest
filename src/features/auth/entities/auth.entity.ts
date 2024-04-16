@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { Column, Entity, PrimaryColumn, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({
@@ -13,14 +14,20 @@ export class Auth {
     })
     name: string
 
-    @Column()
+    @Column({
+        unique: true
+    })
     email: string
+    
+    @Column({
+        select: false,
 
-    @Column()
+    })
     password: string
 
     @Column({
-        length:11
+        length:11,
+        unique: true
     })
     cpf: string
 
