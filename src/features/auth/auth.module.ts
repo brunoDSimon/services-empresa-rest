@@ -10,6 +10,6 @@ import { Auth } from './entities/auth.entity';
   imports:[
     TypeOrmModule.forFeature([Auth])
   ],
-  exports:[]
+  exports:[AuthService]
 })
 export class AuthModule {}

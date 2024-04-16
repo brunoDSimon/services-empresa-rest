@@ -18,8 +18,8 @@ export class AuthController {
     description: 'Json structure for user object',
  })
   create(@Body() createAuthDto: CreateAuthDto, @Res() res: Response) {
-    this.authService.create(createAuthDto);
-    return  res.status(HttpStatus.OK).send(); 
+   
+    return   this.authService.create(createAuthDto);
   }
 
   @Get()

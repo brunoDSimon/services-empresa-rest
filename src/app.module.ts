@@ -16,10 +16,10 @@ import { PedidosModule } from './features/pedidos/pedidos.module';
       type: `mysql`,
       host: `localhost`,
       username: `root`, 
-      port: 3306,
+      port: 3307,
       database:`empresa`,
       password: "root",
-      
+      maxQueryExecutionTime:3000,
       entities: [Auth],
       synchronize: true
     }),

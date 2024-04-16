@@ -12,7 +12,7 @@ export class Auth {
     })
     name: string
 
-    @Column({})
+    @Column()
     email: string
 
     @Column()
