@@ -6,6 +6,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UsuarioService } from '../usuario/usuario.service';
 import { EmpresaService } from '../empresa/empresa.service';
+import {
+  paginate,
+  Pagination,
+  IPaginationOptions,
+} from 'nestjs-typeorm-paginate';
+import { Usuario } from '../usuario/entities/usuario.entity';
+import { Empresa } from '../empresa/entities/empresa.entity';
 
 @Injectable()
 export class PedidoService {
@@ -29,13 +36,16 @@ export class PedidoService {
     }
   }
 
-  findAll() {
-    return this.pedidoRepository.find({
-      relations:{
-        usuario:true,
-        empresa:true
-      }
-    });
+  async findAll(page, limit) {
+    const query = this.pedidoRepository.createQueryBuilder('pedido')
+    .leftJoinAndSelect('pedido.empresa', 'empresaId')
+    .innerJoinAndSelect('pedido.usuario', 'usuarioId')
+    
+    const dados = await paginate(query,{
+      page:page,
+      limit: limit,
+    })
+    return dados
   }
 
   findOne(id: number) {
