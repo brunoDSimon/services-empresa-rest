@@ -15,7 +15,8 @@ export class Empresa {
 
     @Column({
         nullable:false,
-        length: 14
+        length: 14,
+        unique:true
     })
     documento:string
 

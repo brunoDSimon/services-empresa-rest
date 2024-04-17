@@ -1,26 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateEmpresaDto } from './dto/create-empresa.dto';
 import { UpdateEmpresaDto } from './dto/update-empresa.dto';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Empresa } from './entities/empresa.entity';
 
 @Injectable()
 export class EmpresaService {
+  constructor(
+    @InjectRepository(Empresa)
+    private empresaRepository: Repository<Empresa>,
+  ) {}
   create(createEmpresaDto: CreateEmpresaDto) {
-    return 'This action adds a new empresa';
+    this.empresaRepository.create(createEmpresaDto)
+    return this.empresaRepository.save(createEmpresaDto);
   }
 
   findAll() {
-    return `This action returns all empresas`;
+    return this.empresaRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} empresa`;
+  async findOne(id: number) {
+    let user = await this.empresaRepository.findOne({
+      where: {id:id}
+    })
+    return user != null ? user : {};
   }
 
-  update(id: number, updateEmpresaDto: UpdateEmpresaDto) {
-    return `This action updates a #${id} empresa`;
+  async update(id: number, updateEmpresaDto: UpdateEmpresaDto) {
+    let empresa = this.empresaRepository.findOne({where:{id:id}})
+    if(empresa) {
+      this.empresaRepository.update(id, updateEmpresaDto)
+    } else {
+      throw new BadRequestException('dados invalidos')
+    }
   }
 
   remove(id: number) {
-    return `This action removes a #${id} empresa`;
+    let empresa = this.empresaRepository.findOne({where:{id:id}})
+    if(empresa) {
+      this.empresaRepository.delete(id)
+    } else {
+      throw new BadRequestException('dados invalidos')
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { Empresa } from "src/features/empresa/entities/empresa.entity"
 import { Usuario } from "src/features/usuario/entities/usuario.entity"
+import { DecimalTransformer } from "src/shared/utils/decimal.transformer"
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 
 @Entity({name: 'pedido'})
@@ -15,6 +16,11 @@ export class Pedido {
 
     @Column({
         nullable:false,
+        type:"decimal",
+        precision: 10,
+        scale:2,
+        default: 0.0,
+        transformer: new DecimalTransformer()
     })
     valor: number
 
