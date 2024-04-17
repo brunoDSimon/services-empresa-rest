@@ -29,7 +29,7 @@ export class Empresa {
         nullable:true,
         length:14
     })
-    cep:number
+    cep:string
     
     @Column({
         nullable:true,
@@ -44,8 +44,7 @@ export class Empresa {
     logradouro:string
 
     @Column({
-        nullable:true,
-        length:11
+        nullable:true
     })
     numero:number
 

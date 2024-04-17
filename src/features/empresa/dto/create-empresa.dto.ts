@@ -26,7 +26,7 @@ export class CreateEmpresaDto {
         required: false,
         description: 'CEP sem caracteres especial'
     })
-    cep: number
+    cep: string
 
     @ApiProperty({
         example: 'bairo XPTO',
