@@ -10,28 +10,34 @@ export class Auth {
     id: number
 
     @Column({
-        length:127
+        length:127,
+        nullable: false
     })
     name: string
 
     @Column({
-        unique: true
+        unique: true,
+        nullable: false
     })
     email: string
     
     @Column({
         select: false,
-
+        nullable: false
     })
     password: string
 
     @Column({
         length:11,
-        unique: true
+        unique: true,
+        nullable: false
     })
     cpf: string
 
-    @Column()
+    @Column({
+        nullable: false,
+        default: 1
+    })
     role: number
 
     @CreateDateColumn()

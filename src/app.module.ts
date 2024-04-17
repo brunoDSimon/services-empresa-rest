@@ -9,6 +9,9 @@ import { AuthModule } from './features/auth/auth.module';
 import { UsuariosModule } from './features/usuarios/usuarios.module';
 import { EmpresasModule } from './features/empresas/empresas.module';
 import { PedidosModule } from './features/pedidos/pedidos.module';
+import { Empresa } from './features/empresas/entities/empresa.entity';
+import { Pedido } from './features/pedidos/entities/pedido.entity';
+import { Usuario } from './features/usuarios/entities/usuario.entity';
 
 @Module({
   imports: [
@@ -20,7 +23,8 @@ import { PedidosModule } from './features/pedidos/pedidos.module';
       database:`empresa`,
       password: "root",
       maxQueryExecutionTime:3000,
-      entities: [Auth],
+      autoLoadEntities: true,
+      entities: [Auth, Empresa, Pedido, Usuario],
       synchronize: true,
     }),
     ThrottlerModule.forRoot([
