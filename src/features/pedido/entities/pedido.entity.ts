@@ -1,8 +1,8 @@
-import { Empresa } from "src/features/empresas/entities/empresa.entity"
-import { Usuario } from "src/features/usuarios/entities/usuario.entity"
+import { Empresa } from "src/features/empresa/entities/empresa.entity"
+import { Usuario } from "src/features/usuario/entities/usuario.entity"
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 
-@Entity({name: 'pedidos'})
+@Entity({name: 'pedido'})
 export class Pedido {
     @PrimaryGeneratedColumn()
     id: number

@@ -6,12 +6,13 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { Auth } from './features/auth/entities/auth.entity';
 import { AuthModule } from './features/auth/auth.module';
-import { UsuariosModule } from './features/usuarios/usuarios.module';
-import { EmpresasModule } from './features/empresas/empresas.module';
-import { PedidosModule } from './features/pedidos/pedidos.module';
-import { Empresa } from './features/empresas/entities/empresa.entity';
-import { Pedido } from './features/pedidos/entities/pedido.entity';
-import { Usuario } from './features/usuarios/entities/usuario.entity';
+import { Empresa } from './features/empresa/entities/empresa.entity';
+import { Pedido } from './features/pedido/entities/pedido.entity';
+import { Usuario } from './features/usuario/entities/usuario.entity';
+import { UsuarioModule } from './features/usuario/usuario.module';
+import { EmpresaModule } from './features/empresa/empresa.module';
+import { PedidoModule } from './features/pedido/pedido.module';
+
 
 @Module({
   imports: [
@@ -35,9 +36,9 @@ import { Usuario } from './features/usuarios/entities/usuario.entity';
       },
     ]),
     AuthModule, 
-    forwardRef(()=> UsuariosModule),
-    forwardRef(()=> EmpresasModule),
-    forwardRef(()=> PedidosModule),
+    forwardRef(()=> UsuarioModule),
+    forwardRef(()=> EmpresaModule),
+    forwardRef(()=> PedidoModule),
   ],
   controllers: [AppController],
   providers: [AppService,

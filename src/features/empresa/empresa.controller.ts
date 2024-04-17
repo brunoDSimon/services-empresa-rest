@@ -1,37 +1,37 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { EmpresasService } from './empresas.service';
 import { CreateEmpresaDto } from './dto/create-empresa.dto';
 import { UpdateEmpresaDto } from './dto/update-empresa.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { EmpresaService } from './empresa.service';
 
 
 @ApiTags('empresas')
 @Controller('empresas')
-export class EmpresasController {
-  constructor(private readonly empresasService: EmpresasService) {}
+export class EmpresaController {
+  constructor(private readonly empresaService: EmpresaService) {}
 
   @Post()
   create(@Body() createEmpresaDto: CreateEmpresaDto) {
-    return this.empresasService.create(createEmpresaDto);
+    return this.empresaService.create(createEmpresaDto);
   }
 
   @Get()
   findAll() {
-    return this.empresasService.findAll();
+    return this.empresaService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.empresasService.findOne(+id);
+    return this.empresaService.findOne(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateEmpresaDto: UpdateEmpresaDto) {
-    return this.empresasService.update(+id, updateEmpresaDto);
+    return this.empresaService.update(+id, updateEmpresaDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.empresasService.remove(+id);
+    return this.empresaService.remove(+id);
   }
 }

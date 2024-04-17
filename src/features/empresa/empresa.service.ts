@@ -3,7 +3,7 @@ import { CreateEmpresaDto } from './dto/create-empresa.dto';
 import { UpdateEmpresaDto } from './dto/update-empresa.dto';
 
 @Injectable()
-export class EmpresasService {
+export class EmpresaService {
   create(createEmpresaDto: CreateEmpresaDto) {
     return 'This action adds a new empresa';
   }

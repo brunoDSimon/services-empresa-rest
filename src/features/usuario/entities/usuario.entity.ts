@@ -1,4 +1,4 @@
-import { Pedido } from "src/features/pedidos/entities/pedido.entity";
+import { Pedido } from "src/features/pedido/entities/pedido.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({name: 'usuario'})
