@@ -26,13 +26,13 @@ export class UsuarioService {
     let user = await this.usuarioRepository.findOne({
       where: {id: id}
     });
-    return user != null ? user : {}
+    return user
   }
 
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
     let user = await this.findOne(id)
     if(user) {
-      this.usuarioRepository.update(id, updateUsuarioDto)
+      return this.usuarioRepository.update(id, updateUsuarioDto)
     }
     else {
       throw new BadRequestException('dados invalidos')
@@ -42,7 +42,7 @@ export class UsuarioService {
   async remove(id: number) {
     let user = await this.findOne(id)
     if(user) {
-      this.usuarioRepository.delete(id)
+      return this.usuarioRepository.delete(id)
     }
     else {
       throw new BadRequestException('dados invalidos')

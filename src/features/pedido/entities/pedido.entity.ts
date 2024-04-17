@@ -50,7 +50,7 @@ export class Pedido {
     empresa:Empresa    
 
     @ManyToOne(() => Usuario, (usuario) => usuario.pedidos, {
-        nullable:false,
+        nullable:false
     })
     usuario:Usuario    
 

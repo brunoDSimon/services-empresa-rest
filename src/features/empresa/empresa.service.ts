@@ -21,16 +21,16 @@ export class EmpresaService {
   }
 
   async findOne(id: number) {
-    let user = await this.empresaRepository.findOne({
+    let empresa = await this.empresaRepository.findOne({
       where: {id:id}
     })
-    return user != null ? user : {};
+    return empresa;
   }
 
   async update(id: number, updateEmpresaDto: UpdateEmpresaDto) {
     let empresa = this.empresaRepository.findOne({where:{id:id}})
     if(empresa) {
-      this.empresaRepository.update(id, updateEmpresaDto)
+      return this.empresaRepository.update(id, updateEmpresaDto)
     } else {
       throw new BadRequestException('dados invalidos')
     }
@@ -39,7 +39,7 @@ export class EmpresaService {
   remove(id: number) {
     let empresa = this.empresaRepository.findOne({where:{id:id}})
     if(empresa) {
-      this.empresaRepository.delete(id)
+      return this.empresaRepository.delete(id)
     } else {
       throw new BadRequestException('dados invalidos')
     }

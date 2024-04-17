@@ -11,6 +11,9 @@ import { Pedido } from '../pedido/entities/pedido.entity';
   providers: [UsuarioService],
   imports:[
     TypeOrmModule.forFeature([Usuario, Empresa, Pedido]),
+  ],
+  exports:[
+    UsuarioService
   ]
 })
 export class UsuarioModule {}

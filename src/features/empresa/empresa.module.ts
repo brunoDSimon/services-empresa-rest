@@ -12,6 +12,9 @@ import { Usuario } from '../usuario/entities/usuario.entity';
   imports:[
     TypeOrmModule.forFeature([Empresa, Pedido, Usuario]),
 
+  ],
+  exports:[
+    EmpresaService
   ]
 })
 export class EmpresaModule {}

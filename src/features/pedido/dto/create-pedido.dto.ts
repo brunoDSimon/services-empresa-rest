@@ -1,4 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Empresa } from "src/features/empresa/entities/empresa.entity";
+import { Usuario } from "src/features/usuario/entities/usuario.entity";
 
 export class CreatePedidoDto {
     @ApiProperty({
@@ -48,14 +50,14 @@ export class CreatePedidoDto {
         required: true,
         example: 1
     })
-    empresaId:number
+    empresa:Empresa
 
     @ApiProperty({
         description: 'ID da usuario do usuario que vai produzir',
         required: true,
         example: 1
     })
-    usuarioId:number
+    usuario:Usuario
 
 
 }
