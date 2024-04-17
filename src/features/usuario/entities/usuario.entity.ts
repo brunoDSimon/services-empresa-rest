@@ -13,14 +13,15 @@ export class Usuario {
     telefone: string
 
     @Column({
-        length:32,
+        length:200,
         nullable: true
     })
     chavepix: string
 
     @Column({
         length:11,
-        nullable: false
+        nullable: false,
+        unique: true
     })
     cpf: string
 

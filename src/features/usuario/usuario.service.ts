@@ -1,26 +1,51 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Usuario } from './entities/usuario.entity';
 
 @Injectable()
 export class UsuarioService {
-  create(createUsuarioDto: CreateUsuarioDto) {
-    return 'This action adds a new usuario';
+  constructor(
+    @InjectRepository(Usuario)
+    private usuarioRepository: Repository<Usuario>,
+  ) {
+
+  }
+  async create(createUsuarioDto: CreateUsuarioDto) {
+    this.usuarioRepository.create(createUsuarioDto)
+    return this.usuarioRepository.save(createUsuarioDto);
   }
 
   findAll() {
-    return `This action returns all usuarios`;
+    return this.usuarioRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} usuario`;
+  async findOne(id: number) {
+    let user = await this.usuarioRepository.findOne({
+      where: {id: id}
+    });
+    return user != null ? user : {}
   }
 
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
+  async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
+    let user = await this.findOne(id)
+    if(user) {
+      this.usuarioRepository.update(id, updateUsuarioDto)
+    }
+    else {
+      throw new BadRequestException('dados invalidos')
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} usuario`;
+  async remove(id: number) {
+    let user = await this.findOne(id)
+    if(user) {
+      this.usuarioRepository.delete(id)
+    }
+    else {
+      throw new BadRequestException('dados invalidos')
+    }
   }
 }

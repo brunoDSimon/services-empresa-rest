@@ -38,10 +38,14 @@ export class Pedido {
     }) 
     dataFinalizacao: Date
 
-    @ManyToOne(() => Empresa, (empresa) => empresa.pedidos)
+    @ManyToOne(() => Empresa, (empresa) => empresa.pedidos, {
+        nullable:false
+    })
     empresa:Empresa    
 
-    @ManyToOne(() => Usuario, (usuario) => usuario.pedidos)
+    @ManyToOne(() => Usuario, (usuario) => usuario.pedidos, {
+        nullable:false,
+    })
     usuario:Usuario    
 
     @CreateDateColumn()
