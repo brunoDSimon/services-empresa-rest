@@ -21,33 +21,39 @@ export class Empresa {
 
     @Column({
         nullable:true,
+        length:11
     })
-    telefone:number
+    telefone:string
 
     @Column({
         nullable:true,
+        length:14
     })
     cep:number
     
     @Column({
         nullable:true,
+        length:300
     })
-    endereco:number
+    endereco:string
     
     @Column({
         nullable:true,
+        length:300
     })
-    logradouro:number
+    logradouro:string
 
     @Column({
         nullable:true,
+        length:11
     })
     numero:number
 
     @Column({
         nullable:true,
+        length:200
     })
-    complemento:number
+    complemento:string
 
     @OneToMany(() => Pedido, (pedido)=> pedido.empresa)
     pedidos: Pedido[]

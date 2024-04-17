@@ -39,7 +39,7 @@ export class CreateAuthDto {
     role: number
     
     @ApiProperty({
-        example: 66293704061,
+        example: '213.642.840-30',
         required: true,
         description: 'CPF valido'
     })
