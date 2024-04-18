@@ -3,7 +3,7 @@ import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 import { Pedido } from './entities/pedido.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { UsuarioService } from '../usuario/usuario.service';
 import { EmpresaService } from '../empresa/empresa.service';
 import {
@@ -16,14 +16,16 @@ import { Empresa } from '../empresa/entities/empresa.entity';
 
 @Injectable()
 export class PedidoService {
+
   constructor(
     @InjectRepository(Pedido)
     private pedidoRepository: Repository<Pedido>,
     private readonly usuarioService: UsuarioService,
-    private readonly empresaService: EmpresaService
+    private readonly empresaService: EmpresaService,
   ) {
-    
   }
+
+
   async create(createPedidoDto: CreatePedidoDto) {
 
     let usuario = await this.usuarioService.findOne(+createPedidoDto.usuario)
@@ -36,16 +38,47 @@ export class PedidoService {
     }
   }
 
-  async findAll(page, limit) {
-    const query = this.pedidoRepository.createQueryBuilder('pedido')
-    .leftJoinAndSelect('pedido.empresa', 'empresaId')
-    .innerJoinAndSelect('pedido.usuario', 'usuarioId')
-    
-    const dados = await paginate(query,{
-      page:page,
-      limit: limit,
-    })
-    return dados
+  async findAll(page: number, limit:number ,empresaId: number, usuarioId: number, order: string ) {
+
+    let base = `
+    SELECT 
+    pedido.id, 
+    pedido.remessa, 
+    pedido.quantidade, 
+    pedido.modelo, 
+    pedido.descricao, 
+    pedido.dataFinalizacao, 
+    pedido.empresaId, 
+    pedido.usuarioId,
+    empresa.name,
+    usuario.name
+    FROM PEDIDO 
+    INNER JOIN usuario
+    ON pedido.usuarioId = usuario.id
+    INNER JOIN empresa
+    ON pedido.empresaId = empresa.id `
+
+    let where;
+    if(empresaId != null  && usuarioId == null) {
+      where = base.concat(`WHERE empresaId = ${empresaId}`);
+      base = where;
+    }
+    if(empresaId ==null && usuarioId !=null ) {
+      where = base.concat(`WHERE usuarioId = ${usuarioId}`);
+      base = where;
+    }
+    if(empresaId !=null && usuarioId !=null ) {
+      where = base.concat(`WHERE empresaId = ${empresaId} and usuarioId = ${usuarioId}`);
+      base = where;
+    }
+    let paginate = `
+    order by pedido.id = 'ASC'
+    LIMIT  ${limit}
+    OFFSET  ${page}
+    `
+    let query = base.concat(paginate)
+    const rawData =  this.pedidoRepository.query(query)   
+    return rawData
   }
 
   findOne(id: number) {

@@ -4,6 +4,7 @@ import { UpdatePedidoDto } from './dto/update-pedido.dto';
 import { ApiOkResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { PedidoService } from './pedido.service';
 import { Pedido } from './entities/pedido.entity';
+import { query } from 'express';
 @ApiTags('pedido')
 @Controller('pedido')
 export class PedidoController {
@@ -38,10 +39,13 @@ export class PedidoController {
   @ApiOkResponse({
   })
   findAll(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+    @Query('page', new DefaultValuePipe(0)) page: number = 0,
+    @Query('limit', new DefaultValuePipe(10)) limit: number = 10,
+    @Query('order',new DefaultValuePipe("ASC")) order: "ASC" | "DESC",
+    @Query('empresaId') empresaId: number = null,
+    @Query('usuarioId') usuarioId: number = null,
   ) {
-    return this.pedidoService.findAll(page, limit);
+    return this.pedidoService.findAll(page,limit, empresaId, usuarioId, order)
   }
 
   @Get(':id')
