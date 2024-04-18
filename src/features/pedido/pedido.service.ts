@@ -50,8 +50,8 @@ export class PedidoService {
     pedido.dataFinalizacao, 
     pedido.empresaId, 
     pedido.usuarioId,
-    empresa.name,
-    usuario.name
+    empresa.name as nomeEmpresa,
+    usuario.name as nomeUsuario
     FROM PEDIDO 
     INNER JOIN usuario
     ON pedido.usuarioId = usuario.id
