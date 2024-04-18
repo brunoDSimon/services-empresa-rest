@@ -12,6 +12,7 @@ import { Usuario } from './features/usuario/entities/usuario.entity';
 import { UsuarioModule } from './features/usuario/usuario.module';
 import { EmpresaModule } from './features/empresa/empresa.module';
 import { PedidoModule } from './features/pedido/pedido.module';
+import { ExportacaoModule } from './features/exportacao/exportacao.module';
 
 
 @Module({
@@ -39,6 +40,7 @@ import { PedidoModule } from './features/pedido/pedido.module';
     forwardRef(()=> UsuarioModule),
     forwardRef(()=> EmpresaModule),
     forwardRef(()=> PedidoModule),
+    forwardRef(()=> ExportacaoModule),
   ],
   controllers: [AppController],
   providers: [AppService,
