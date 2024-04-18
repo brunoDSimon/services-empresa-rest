@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, DefaultValuePipe, ParseIntPipe } from '@nestjs/common';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
-import { ApiOkResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiOkResponse, ApiQuery, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { PedidoService } from './pedido.service';
 import { Pedido } from './entities/pedido.entity';
 import { query } from 'express';
@@ -53,6 +53,32 @@ export class PedidoController {
       }],
     }
   })
+  @ApiQuery({
+    name: 'page',
+    required:true,
+    example: 0,
+    type:'number',
+    
+    })
+  @ApiQuery({
+    name: 'limit',
+    required:true,
+    example: 10,
+    type:'number',
+    })
+    @ApiQuery({
+      name: 'empresaId',
+      required:false,
+      example: 0,
+      type:'number',
+      
+      })
+    @ApiQuery({
+      name: 'usuarioId',
+      required:false,
+      example: 10,
+      type:'number',
+      })
   findAll(
     @QueryRequired('page', new DefaultValuePipe(0)) page: number = 0,
     @QueryRequired('limit', new DefaultValuePipe(10)) limit: number = 10,

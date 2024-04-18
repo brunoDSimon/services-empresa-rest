@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, DefaultValuePipe } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UsuarioService } from './usuario.service';
+import { QueryRequired } from 'src/shared/decorators/queryRequired';
 
 @ApiTags('usuario')
 @Controller('usuario')
@@ -14,9 +15,25 @@ export class UsuarioController {
     return this.usuarioService.create(createUsuarioDto);
   }
 
+  @ApiQuery({
+    name: 'page',
+    required:true,
+    example: 0,
+    type:'number',
+    
+    })
+  @ApiQuery({
+    name: 'limit',
+    required:true,
+    example: 10,
+    type:'number',
+    })
   @Get()
-  findAll() {
-    return this.usuarioService.findAll();
+  findAll(
+    @QueryRequired('page', new DefaultValuePipe(0)) page: number = 0,
+    @QueryRequired('limit', new DefaultValuePipe(10)) limit: number = 10,
+  ): Promise<any> {
+    return this.usuarioService.findAll(page,limit);
   }
 
   @Get(':id')

@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
+import { AuthenticationDto } from './dto/authentication-dto';
 
 @Injectable()
 export class AuthService {
@@ -88,7 +89,7 @@ export class AuthService {
   }
 
 
-  async login(email: string, password:string) {
+  async login({email, password}: AuthenticationDto) {
     let result = await this.authRepository.createQueryBuilder('auth')
     .where({
       email:email

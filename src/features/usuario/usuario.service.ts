@@ -18,8 +18,15 @@ export class UsuarioService {
     return this.usuarioRepository.save(createUsuarioDto);
   }
 
-  findAll() {
-    return this.usuarioRepository.find();
+  findAll(page: number, limit:number) {
+    const query = `
+    select * from usuario 
+    order by id = 'ASC'
+    LIMIT  ${limit}
+    OFFSET  ${page}
+    `
+    const rawData =  this.usuarioRepository.query(query)   
+    return rawData
   }
 
   async findOne(id: number) {
