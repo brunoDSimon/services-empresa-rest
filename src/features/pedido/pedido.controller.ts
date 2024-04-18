@@ -5,6 +5,7 @@ import { ApiOkResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { PedidoService } from './pedido.service';
 import { Pedido } from './entities/pedido.entity';
 import { query } from 'express';
+import { QueryRequired } from 'src/shared/decorators/queryRequired';
 @ApiTags('pedido')
 @Controller('pedido')
 export class PedidoController {
@@ -53,8 +54,8 @@ export class PedidoController {
     }
   })
   findAll(
-    @Query('page', new DefaultValuePipe(0)) page: number = 0,
-    @Query('limit', new DefaultValuePipe(10)) limit: number = 10,
+    @QueryRequired('page', new DefaultValuePipe(0)) page: number = 0,
+    @QueryRequired('limit', new DefaultValuePipe(10)) limit: number = 10,
     @Query('order',new DefaultValuePipe("ASC")) order: "ASC" | "DESC",
     @Query('empresaId') empresaId: number = null,
     @Query('usuarioId') usuarioId: number = null,
