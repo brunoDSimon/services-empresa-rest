@@ -37,6 +37,20 @@ export class PedidoController {
 
   @Get()
   @ApiOkResponse({
+    schema: {
+      example: [{
+        "id": 4,
+        "remessa": "R10001",
+        "quantidade": 10,
+        "modelo": "A000B21",
+        "descricao": "Couro cor bege",
+        "dataFinalizacao": "2024-04-17T20:04:10.000Z",
+        "empresaId": 1,
+        "usuarioId": 3,
+        "nomeEmpresa": "Empresa teste",
+        "nomeUsuario": "Usuario teste 01"
+      }],
+    }
   })
   findAll(
     @Query('page', new DefaultValuePipe(0)) page: number = 0,
