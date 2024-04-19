@@ -41,6 +41,7 @@ export class Pedido {
 
     @Column({
         nullable:true,
+        default: null
     }) 
     dataFinalizacao: Date
 
@@ -54,10 +55,17 @@ export class Pedido {
     })
     usuario:Usuario    
 
-    @CreateDateColumn()
+    @CreateDateColumn({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP(6)'
+    })
     createdAt : string
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP(6)',
+        onUpdate: 'CURRENT_TIMESTAMP(6)'
+    })
     updatedAt : string
 
   

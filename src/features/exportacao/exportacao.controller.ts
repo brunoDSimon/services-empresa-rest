@@ -9,9 +9,9 @@ import { join } from 'path';
 export class ExportacaoController {
   constructor(private readonly exportacaoService: ExportacaoService) {}
 
-  @Get()
-  getFile(): StreamableFile {
-    const file = createReadStream(join(process.cwd(), 'package.json'));
-    return new StreamableFile(file);
+
+  @Get('pagamento-empresa-pdf')
+  pedidoArquivoPDF() {
+    return this.exportacaoService.gerarDados(1, "2024-04-01 00:00:00", "2024-04-19 23:59:59")
   }
 }

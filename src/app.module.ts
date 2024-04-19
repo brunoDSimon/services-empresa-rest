@@ -28,6 +28,7 @@ import { ExportacaoModule } from './features/exportacao/exportacao.module';
       autoLoadEntities: true,
       entities: [Auth, Empresa, Pedido, Usuario],
       synchronize: true,
+      timezone: "-03:00",
     }),
     ThrottlerModule.forRoot([
       {
