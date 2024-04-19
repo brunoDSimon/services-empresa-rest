@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+      @page {
+            size: A4 portrait; /* Define o tamanho da página como A4 e a orientação como retrato (vertical) */
+            margin: 0; /* Remove as margens padrão */
+        }
+
+        html, body {
+            height: 100%; /* Define a altura do corpo e do HTML como 100% para ocupar toda a página */
+            margin: 0; /* Remove as margens padrão */
+            padding: 0; /* Remove os preenchimentos padrão */
+            font-size: 14px; /* Define o tamanho da fonte padrão */
+        }
+
+        body {
+            display: flex; /* Usa flexbox para alinhar o conteúdo verticalmente */
+            justify-content: center; /* Alinha o conteúdo horizontalmente */
+            align-items: center; /* Alinha o conteúdo verticalmente */
+        }
+
+        .container {
+            width: 100%; /* Define a largura do container como 100% */
+            max-width: 21cm; /* Define a largura máxima do container como 21cm (tamanho da página A4) */
+            overflow-x: auto; /* Adiciona uma barra de rolagem horizontal caso o conteúdo seja muito largo */
+        }
+
+        table {
+            width: 100%; /* Define a largura da tabela como 100% */
+            border-collapse: collapse; /* Colapse as bordas das células */
+            border-radius: 10px; /* Adiciona um arredondamento às bordas da tabela */
+            overflow: hidden; /* Esconde qualquer conteúdo que exceda os limites da tabela */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave à tabela */
+        }
+
+        th, td {
+            padding: 8px; /* Adiciona um preenchimento menor às células */
+            text-align: center; /* Alinha o texto ao centro */
+            border: 1px solid #dddddd; /* Adiciona uma borda leve a todas as células */
+            word-wrap: break-word; /* Quebra a palavra quando ela não cabe em uma linha */
+            max-width: 21cm; /* Define a largura máxima das células */
+            font-size: 9px; /* Define o tamanho da fonte das células como 9px */
+        }
+
+        th {
+            background-color: #f2f2f2; /* Define uma cor de fundo para as células de cabeçalho */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* Define uma cor de fundo alternada para as linhas pares */
+        }
+
+        tr:hover {
+            background-color: #f5f5f5; /* Altera a cor de fundo ao passar o mouse sobre as linhas */
+        }
+    </style>
+</head>
+<body>
+	<div class="container">
+      
+        <table >
+            <thead>
+                <tr>
+                <th>Remessa</th>
+                <th>Modelo</th>
+                <th>Quantidade</th>
+                <th>Valor bolsa</th>
+                <th>Data Entrada</th>
+                <th>Data Saida</th>
+                <th>Valor a receber</th>
+                </tr>
+            </thead>
+                <tbody>
+                <% pedido.forEach(pedido => {%>
+                <tr>
+                    <td><%= pedido.remessa%></td>
+                    <td><%= pedido.modelo%></td>
+                    <td><%= pedido.quantidade%></td>
+                    <td><%= (pedido.valorTotal).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})%></td>
+                    <td><%= moment(pedido?.dataEntrada).format( 'DD/MM/YYYY')%></td>
+                    <td><%= moment(pedido?.dataTermino).format( 'DD/MM/YYYY')%></td>
+                    <td><%=(pedido?.valorTotal).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})%></td>
+                </tr>
+                <% }) %>         
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
