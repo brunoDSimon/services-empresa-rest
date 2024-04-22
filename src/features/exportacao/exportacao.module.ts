@@ -8,6 +8,7 @@ import { Empresa } from '../empresa/entities/empresa.entity';
 import { Usuario } from '../usuario/entities/usuario.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PedidoModule } from '../pedido/pedido.module';
+import { CsvModule } from 'nest-csv-parser';
 
 @Module({
   controllers: [ExportacaoController],
@@ -17,6 +18,7 @@ import { PedidoModule } from '../pedido/pedido.module';
     forwardRef(()=> UsuarioModule),
     forwardRef(()=> EmpresaModule),
     forwardRef(()=> PedidoModule),
+    CsvModule
   ]
 })
 export class ExportacaoModule {}

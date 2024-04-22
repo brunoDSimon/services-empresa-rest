@@ -5,10 +5,10 @@ import { Repository } from 'typeorm';
 import { Empresa } from '../empresa/entities/empresa.entity';
 import * as ejs from 'ejs';
 import * as fs from 'fs';
-import * as PDFDocument from 'pdfkit';
 import { join } from 'path';
 import  * as moment from 'moment';
 import * as pdf from 'html-pdf';
+import { CsvParser } from 'nest-csv-parser';
 
 @Injectable()
 export class ExportacaoService {
@@ -42,6 +42,7 @@ export class ExportacaoService {
         private pedidoRepository: Repository<Pedido>,
         @InjectRepository(Empresa)
         private empresaRepository: Repository<Empresa>,
+        private readonly csvParser: CsvParser
     ) {}
 
 
@@ -59,7 +60,7 @@ export class ExportacaoService {
 
     }
 
-    public async gerarDados(idEmpresa: number, dataInicial:string, dataFinal:string) {
+    public async gerarDadosPDF(idEmpresa: number, dataInicial:Date, dataFinal:Date) {
         let query =  this.baseExportacao.concat(` 
         WHERE  pedido.empresaId = ${idEmpresa} and
         pedido.dataFinalizacao IS NULL 
@@ -72,15 +73,19 @@ export class ExportacaoService {
         const path = join(__dirname, '..', '..', 'templates', `index.ejs`);
         const template = fs.readFileSync(path, 'utf-8');
         const html = ejs.render(template, {dadosEmpresa, pedido, valores,moment:moment, dataInicial, dataFinal});
-        return new Promise<Buffer>((resolve, reject) => {
-          pdf.create(html).toBuffer((err, buffer) => {
-              if (err) {
-                  reject(err);
-              } else {
-                  resolve(buffer);
-              }
+        try {
+          return new Promise<Buffer>((resolve, reject) => {
+            pdf.create(html).toBuffer((err, buffer) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(buffer);
+                }
+            });
           });
-      });
+        } catch (error) {
+          throw new BadRequestException(error)
+        }
     }
 
     public somarQtdeValor(retorno) {
@@ -93,5 +98,9 @@ export class ExportacaoService {
           },0)
           return {quantidadeTotal, valorTotal}
         }
+    }
+
+    public async gerarDadosCSV(idEmpresa: number, dataInicial:string, dataFinal:string) {
+
     }
 }
