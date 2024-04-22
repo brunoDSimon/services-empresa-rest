@@ -9,6 +9,7 @@ import { join } from 'path';
 import  * as moment from 'moment';
 import * as pdf from 'html-pdf';
 import { createObjectCsvWriter } from 'csv-writer';
+import * as xlsxPopulate from 'xlsx-populate';
 
 @Injectable()
 export class ExportacaoService {
@@ -130,5 +131,59 @@ export class ExportacaoService {
       });
     }
     return dados
+  }
+
+  async generateExcel(idEmpresa: number, dataInicial:Date, dataFinal:Date) {
+    let query =  this.baseExportacao.concat(` 
+    WHERE  pedido.empresaId = ${idEmpresa} and
+    pedido.dataFinalizacao IS NULL 
+    AND pedido.createdAt BETWEEN  '${dataInicial}' AND '${dataFinal}';
+    `)
+    const pedido =  await this.pedidoRepository.query(query)   
+    const tratado = await this.tratarDadosParaCsv(pedido)
+    const dadosEmpresa = await this.empresaRepository.findOne({where:{id:idEmpresa}})
+    let valores = await this.somarQtdeValor(pedido);
+   
+    const workbook = await xlsxPopulate.fromBlankAsync();
+    const sheet = workbook.sheet(0);
+    // Adiciona o logotipo da empresa e informações de contato
+    // Você pode adicionar o logotipo e informações de contato como desejado
+    sheet.cell('A1').value('LOGOTIPO DA EMPRESA');
+    sheet.cell('A2').value('Informações de Contato');
+    sheet.cell('A3').value('Endereço: ' + dadosEmpresa.endereco + '' + dadosEmpresa.logradouro + '' + dadosEmpresa.numero);
+    sheet.cell('A4').value('Telefone: ' + dadosEmpresa.telefone);
+    sheet.cell('A5').value('E-mail: ' + 'companyInfo.email');
+
+    // Adiciona os detalhes da empresa
+    sheet.cell('A7').value('DADOS DA EMPRESA');
+    sheet.cell('A8').value('Nome da Empresa:');
+    sheet.cell('B8').value('companyInfo.name');
+    sheet.cell('A9').value('Endereço:');
+    sheet.cell('B9').value('companyInfo.address');
+    sheet.cell('A10').value('Telefone:');
+    sheet.cell('B10').value('companyInfo.phone');
+    sheet.cell('A11').value('E-mail:');
+    sheet.cell('B11').value('companyInfo.email');
+
+    // Adiciona os valores totais
+    sheet.cell('A13').value('VALORES TOTAIS');
+    sheet.cell('A14').value('Total de bolsas produzidas:');
+    sheet.cell('B14').value(valores.quantidadeTotal);
+    sheet.cell('A15').value('Total:');
+    sheet.cell('B15').value(valores.valorTotal);
+    // Adicione outras informações de totais conforme necessário
+
+    // Adiciona os cabeçalhos dos dados dinâmicos
+    sheet.cell('A17').value('DADOS DINÂMICOS');
+    // Adicione os dados dinâmicos
+    tratado.forEach((row, rowIndex) => {
+      Object.keys(row).forEach((key, colIndex) => {
+        sheet.cell(rowIndex + 18, colIndex + 1).value(row[key]);
+      });
+    });
+
+    // Converte o workbook para um buffer e o retorna
+    const buffer = await workbook.outputAsync();
+    return buffer;
   }
 }
