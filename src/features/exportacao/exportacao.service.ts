@@ -8,7 +8,7 @@ import * as fs from 'fs';
 import { join } from 'path';
 import  * as moment from 'moment';
 import * as pdf from 'html-pdf';
-import { CsvParser } from 'nest-csv-parser';
+import { createObjectCsvWriter } from 'csv-writer';
 
 @Injectable()
 export class ExportacaoService {
@@ -42,7 +42,6 @@ export class ExportacaoService {
         private pedidoRepository: Repository<Pedido>,
         @InjectRepository(Empresa)
         private empresaRepository: Repository<Empresa>,
-        private readonly csvParser: CsvParser
     ) {}
 
 
@@ -100,7 +99,36 @@ export class ExportacaoService {
         }
     }
 
-    public async gerarDadosCSV(idEmpresa: number, dataInicial:string, dataFinal:string) {
-
+    public async gerarDadosCSV(idEmpresa: number, dataInicial:Date, dataFinal:Date) {
+      let query =  this.baseExportacao.concat(` 
+        WHERE  pedido.empresaId = ${idEmpresa} and
+        pedido.dataFinalizacao IS NULL 
+        AND pedido.createdAt BETWEEN  '${dataInicial}' AND '${dataFinal}';
+        `)
+        const pedido =  await this.pedidoRepository.query(query)
+        const tratado = await this.tratarDadosParaCsv(pedido)
+        const csvWriter = createObjectCsvWriter({
+          path: 'output.csv',
+          header: Object.keys(tratado[0]).map(key => ({ id: key, title: key })),
+          encoding: 'utf-8'
+        });
+  
+      await csvWriter.writeRecords(tratado);
+  
+      return 'output.csv';
     }
+
+  public tratarDadosParaCsv(dados) {
+    if(dados.length) {
+      dados.forEach(element => {
+        if(element.dataEntrada != null) {
+          element.dataEntrada = moment(element.dataEntrada).format( 'DD/MM/YYYY');
+        }
+        if(element.dataTermino != null) {
+          element.dataTermino = moment(element.dataTermino).format( 'DD/MM/YYYY');
+        }
+      });
+    }
+    return dados
+  }
 }

@@ -1,4 +1,4 @@
-import { Controller, DefaultValuePipe, Get, Res, StreamableFile } from '@nestjs/common';
+import { BadRequestException, Controller, DefaultValuePipe, Get, Res, StreamableFile } from '@nestjs/common';
 import { ExportacaoService } from './exportacao.service';
 import { ApiHeader, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { createReadStream } from 'fs';
@@ -52,15 +52,25 @@ export class ExportacaoController {
   @ApiResponse({
     type:'file'
   })
-  @ApiOperation({ summary: 'Baixar PDF de fechamento de mês' })
+  @ApiOperation({ summary: 'Baixar CSV de fechamento de mês' })
   async pedidoArquivoCSV(
-    @Res() res: Response
+    @Res() res: Response,
+    @QueryRequired('empresaId', new DefaultValuePipe(0)) empresaId:number = 0,
+    @QueryRequired('dataInicial', new DefaultValuePipe(Date)) dataInicial: Date,
+    @QueryRequired('dataFinal', new DefaultValuePipe(Date)) dataFinal:Date
   ) {
-
+    try {
+      const filePath = await this.exportacaoService.gerarDadosCSV(empresaId, dataInicial, dataFinal);
+      return res.download(filePath);
+    } catch (error) {
+      throw new BadRequestException('Não foi possivel gerar o arquivo')
+    }
   }
 
   @Get('teste') 
   teste() {
     return this.exportacaoService.query(1, "2024-04-19 00:00:00", "2024-04-19 23:59:59")
   }
+
+  
 }
