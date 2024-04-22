@@ -21,6 +21,7 @@ export class ExportacaoService {
         pedido.descricao,
         pedido.createdAt as dataEntrada,
         pedido.dataFinalizacao as dataTermino,
+        pedido.valor as valorUnidade,
         empresa.name as nomeEmpresa,
         usuario.name as nomeFuncionario,
         (pedido.quantidade * pedido.valor) as valorTotal
@@ -54,7 +55,7 @@ export class ExportacaoService {
 
       const dadosEmpresa = await this.empresaRepository.findOne({where:{id:idEmpresa}})
       let valores = await this.somarQtdeValor(pedido)
-      return {dadosEmpresa, pedido, valores,moment:moment, dataInicial, dataFinal}
+      return {dadosEmpresa, pedido, valores, dataInicial, dataFinal}
 
     }
 

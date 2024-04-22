@@ -30,11 +30,13 @@
         }
 
         table {
-            width: 100%; /* Define a largura da tabela como 100% */
+            padding: auto;
+            width: 20cm; /* Define a largura da tabela como 100% */
             border-collapse: collapse; /* Colapse as bordas das células */
-            border-radius: 10px; /* Adiciona um arredondamento às bordas da tabela */
             overflow: hidden; /* Esconde qualquer conteúdo que exceda os limites da tabela */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave à tabela */
+            border-top: 0;
+            border-bottom: 0;
         }
 
         th, td {
@@ -57,37 +59,97 @@
         tr:hover {
             background-color: #f5f5f5; /* Altera a cor de fundo ao passar o mouse sobre as linhas */
         }
+       .logo {
+        background-image: url('../images/logo.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        display: block;
+        height: 70px;
+        width: 70px;
+        padding: 50px;
+       }
+         /* Estilos personalizados para o header */
+
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .company-info {
+            font-size: 16px;
+        }
+
+        .item-info {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* Estilos para o rodapé */
+        .footer-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 21cm;
+            text-align: center;
+            padding: 10px;
+            background-color: #f8f9fa; /* Cor de fundo */
+            border-top: 1px solid #dee2e6; /* Borda superior */
+        }
     </style>
 </head>
 <body>
+   
 	<div class="container">
-      
+        <div class="row">
+            <div class="col-12">
+                <span class="company-name">Nome da Empresa</span>
+                <p class="company-info">Documento: CNPJ 123.456.789/0001-00</p>
+                <p class="company-info">Endereço: Av. Exemplo, 1234 - Bairro, Cidade - Estado</p>
+            </div>
+            <div class="col-12 ">
+                <p class="item-info">Quantidade de itens produzidos: <%= valores.quantidadeTotal%></p>
+                <p class="item-info">Valor total: <%= (Number(valores.valorTotal)).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})%></p>
+            </div>
+            <div class="col-12 ">
+                <p class="item-info">Relatorio de <%= moment(dataInicial).format( 'DD/MM/YYYY')%> até <%= moment(dataFinal).format( 'DD/MM/YYYY')%></p>
+            </div>
+        </div>
+    
         <table >
             <thead>
                 <tr>
                 <th>Remessa</th>
                 <th>Modelo</th>
                 <th>Quantidade</th>
-                <th>Valor bolsa</th>
+                <th>Valor unidade</th>
                 <th>Data Entrada</th>
                 <th>Data Saida</th>
-                <th>Valor a receber</th>
+                <th>Valor total</th>
                 </tr>
             </thead>
-                <tbody>
+            <tbody>
                 <% pedido.forEach(pedido => {%>
                 <tr>
                     <td><%= pedido.remessa%></td>
                     <td><%= pedido.modelo%></td>
                     <td><%= pedido.quantidade%></td>
-                    <td><%= (pedido.valorTotal).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})%></td>
+                    <td><%= (Number(pedido.valorUnidade)).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})%></td>
                     <td><%= moment(pedido?.dataEntrada).format( 'DD/MM/YYYY')%></td>
-                    <td><%= moment(pedido?.dataTermino).format( 'DD/MM/YYYY')%></td>
-                    <td><%=(pedido?.valorTotal).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})%></td>
+                    <% if(pedido?.dataTermino != null){ %>
+                        <td><%= moment(pedido?.dataTermino).format( 'DD/MM/YYYY')%></td>
+                      <% } else{ %>  
+                        <td>-</td>
+                     <% } %>
+                    <td><%=(Number(pedido?.valorTotal)).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})%></td>
                 </tr>
                 <% }) %>         
             </tbody>
         </table>
+        <div class="footer-container">
+            <p>Souza Simon 26.980.474/0001-30</p>
+            <p><%= moment(new Date()).format( 'MMMM Do YYYY, h:mm:ss a ')%></p>
+        </div>
     </div>
+    
 </body>
 </html>
