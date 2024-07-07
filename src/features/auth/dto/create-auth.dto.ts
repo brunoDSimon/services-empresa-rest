@@ -44,6 +44,8 @@ export class CreateAuthDto {
         description: 'CPF valido'
     })
 
-    @IsString()
+    @IsString({
+        
+    })
     cpf:string
 }

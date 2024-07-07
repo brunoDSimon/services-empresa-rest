@@ -13,6 +13,7 @@ import { UsuarioModule } from './features/usuario/usuario.module';
 import { EmpresaModule } from './features/empresa/empresa.module';
 import { PedidoModule } from './features/pedido/pedido.module';
 import { ExportacaoModule } from './features/exportacao/exportacao.module';
+import { DashboardsModule } from './dashboards/dashboards.module';
 
 
 @Module({
@@ -42,6 +43,7 @@ import { ExportacaoModule } from './features/exportacao/exportacao.module';
     forwardRef(()=> EmpresaModule),
     forwardRef(()=> PedidoModule),
     forwardRef(()=> ExportacaoModule),
+    DashboardsModule,
   ],
   controllers: [AppController],
   providers: [AppService,

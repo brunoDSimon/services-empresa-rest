@@ -5,6 +5,7 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthenticationDto } from './dto/authentication-dto';
+import { SanitizePipe } from 'src/shared/pipe/sanatize.pipe';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -12,7 +13,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
+  create(@Body(new SanitizePipe()) createAuthDto: CreateAuthDto) {
     return this.authService.create(createAuthDto);
   }
 

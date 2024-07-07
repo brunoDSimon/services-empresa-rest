@@ -21,7 +21,17 @@ export class AuthService {
   async create(dto: CreateAuthDto) {
     let pwt = await bcrypt.hash(dto.password,await bcrypt.genSalt())
     dto.password = pwt
-    return  this.authRepository.save(dto)
+    let existeEmail = await this.authRepository.existsBy({
+      email: dto.email
+    })
+    let existeCpf = await this.authRepository.existsBy({
+      cpf: dto.cpf
+    })
+    if(existeCpf || existeEmail) {
+      throw new BadRequestException()
+    } else {
+      return  this.authRepository.save(dto)
+    }
   }
 
   async findAll() {

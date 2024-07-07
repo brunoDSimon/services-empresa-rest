@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference'
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import {  SanitizePipe } from './shared/pipe/sanatize.pipe';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -13,7 +14,11 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('ejs');
-  app.useGlobalPipes(new ValidationPipe())
+  app.useGlobalPipes(
+    new ValidationPipe(), 
+    new SanitizePipe()
+  
+  )
   app.enableCors({
     origin: ['*'],
     
