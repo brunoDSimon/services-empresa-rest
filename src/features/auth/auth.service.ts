@@ -21,7 +21,6 @@ export class AuthService {
   async create(dto: CreateAuthDto) {
     let pwt = await bcrypt.hash(dto.password,await bcrypt.genSalt())
     dto.password = pwt
-    let pedido = await this.authRepository.create(dto)
     return  this.authRepository.save(dto)
   }
 

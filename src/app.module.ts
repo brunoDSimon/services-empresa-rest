@@ -18,10 +18,10 @@ import { ExportacaoModule } from './features/exportacao/exportacao.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: `mysql`,
+      type: 'mysql',
       host: `localhost`,
       username: `root`, 
-      port: 3307,
+      port: 3306,
       database:`empresa`,
       password: "root",
       maxQueryExecutionTime:3000,
