@@ -14,12 +14,12 @@ export class UsuarioService {
 
   }
   async create(createUsuarioDto: CreateUsuarioDto) {
-    this.usuarioRepository.create(createUsuarioDto)
     let existeCpf = await this.usuarioRepository.findOneBy({cpf: createUsuarioDto.cpf})
     if(existeCpf) {
       throw new BadRequestException('Usuario existente')
     }
     try {
+      this.usuarioRepository.create(createUsuarioDto)
       this.usuarioRepository.save(createUsuarioDto);
     } catch (error) {
       throw new InternalServerErrorException(error)

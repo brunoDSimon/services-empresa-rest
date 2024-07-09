@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateEmpresaDto } from './dto/create-empresa.dto';
 import { UpdateEmpresaDto } from './dto/update-empresa.dto';
 import { Repository } from 'typeorm';
@@ -12,9 +12,18 @@ export class EmpresaService {
     @InjectRepository(Empresa)
     private empresaRepository: Repository<Empresa>,
   ) {}
-  create(createEmpresaDto: CreateEmpresaDto) {
-    this.empresaRepository.create(createEmpresaDto)
-    return this.empresaRepository.save(createEmpresaDto);
+  async create(createEmpresaDto: CreateEmpresaDto) {
+    let existe = await this.empresaRepository.findOneBy({documento: createEmpresaDto.documento})
+    console.log(existe)
+    if(existe) {
+      throw new BadRequestException('Empresa existente')
+    }
+    try {
+      this.empresaRepository.create(createEmpresaDto)
+      this.empresaRepository.save(createEmpresaDto);
+    } catch (error) {
+      throw new InternalServerErrorException(error)
+    }
   }
 
   

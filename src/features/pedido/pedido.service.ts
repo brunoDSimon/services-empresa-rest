@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 import { Pedido } from './entities/pedido.entity';
@@ -16,6 +16,7 @@ import { Empresa } from '../empresa/entities/empresa.entity';
 
 @Injectable()
 export class PedidoService {
+  private readonly logger = new Logger(PedidoService.name);
 
   constructor(
     @InjectRepository(Pedido)
@@ -34,12 +35,18 @@ export class PedidoService {
       this.pedidoRepository.create(createPedidoDto);
       return this.pedidoRepository.save(createPedidoDto);
     } else {
-      throw new BadRequestException('dados invalidos')
+      if(!usuario) {
+        throw new BadRequestException('usuario invalidos')
+      }
+      if(!empresa) {
+        throw new BadRequestException('empresa invalidos')
+      }
     }
   }
 
-  async findAll(page: number, limit:number ,empresaId: number, usuarioId: number, order: string ) {
-
+  async findAll(page: number, limit:number ,empresaId: number, usuarioId: number,  order: 'ASC' | 'DESC' = 'ASC' ) {
+   
+ 
     let base = `
     SELECT 
     pedido.id, 
@@ -48,6 +55,7 @@ export class PedidoService {
     pedido.modelo, 
     pedido.descricao, 
     pedido.dataFinalizacao, 
+    pedido.dataFinalizacao as dataCriacao,
     pedido.empresaId, 
     pedido.usuarioId,
     empresa.name as nomeEmpresa,
@@ -77,9 +85,14 @@ export class PedidoService {
     OFFSET  ${page}
     `
     let query = base.concat(paginate)
+
     const rawData =  this.pedidoRepository.query(query)   
+
     return rawData
+   
   }
+  
+
 
   findOne(id: number) {
     return this.pedidoRepository.findOne({where:{id:id}});
@@ -96,6 +109,11 @@ export class PedidoService {
   }
 
   remove(id: number) {
-    return this.pedidoRepository.delete(id);
+    try {
+      this.pedidoRepository.delete(id);
+    } catch (error) {
+      throw new InternalServerErrorException(error)
+    }
+
   }
 }

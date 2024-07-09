@@ -26,11 +26,6 @@ export class RequestFormatInterceptor implements NestInterceptor {
             data: null
           };
         }
-      }),
-      catchError(err => {
-        // Tratamento de erros
-        response.status(err.status || HttpStatus.INTERNAL_SERVER_ERROR);
-        return throwError(() => new Error('Erro interno no servidor'));
       })
     );
   }
