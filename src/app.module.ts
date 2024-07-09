@@ -49,7 +49,7 @@ import { RequestFormatInterceptor } from './shared/utils/request-format.intercep
   controllers: [AppController],
   providers: [AppService,
     {provide: APP_GUARD, useClass: ThrottlerGuard},
-    {provide: APP_INTERCEPTOR, useClass:RequestFormatInterceptor}
+    // {provide: APP_INTERCEPTOR, useClass:RequestFormatInterceptor}
   ],
 })
 export class AppModule {}

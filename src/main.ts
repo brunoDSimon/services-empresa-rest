@@ -7,6 +7,7 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import {  SanitizePipe } from './shared/pipe/sanatize.pipe';
 import { RequestFormatInterceptor } from './shared/utils/request-format.interceptor';
+import { AllExceptionsFilter } from './shared/utils/all-exceptions/all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -19,6 +20,9 @@ async function bootstrap() {
     new ValidationPipe(), 
     new SanitizePipe()
   
+  )
+  app.useGlobalFilters(
+    new AllExceptionsFilter()
   )
   
   app.useGlobalInterceptors(

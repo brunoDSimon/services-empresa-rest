@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,7 +15,16 @@ export class UsuarioService {
   }
   async create(createUsuarioDto: CreateUsuarioDto) {
     this.usuarioRepository.create(createUsuarioDto)
-    return this.usuarioRepository.save(createUsuarioDto);
+    let existeCpf = await this.usuarioRepository.findOneBy({cpf: createUsuarioDto.cpf})
+    if(existeCpf) {
+      throw new BadRequestException('Usuario existente')
+    }
+    try {
+      this.usuarioRepository.save(createUsuarioDto);
+    } catch (error) {
+      throw new InternalServerErrorException(error)
+    }
+
   }
 
   findAll(page: number, limit:number) {

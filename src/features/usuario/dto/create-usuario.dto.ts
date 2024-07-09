@@ -16,7 +16,7 @@ export class CreateUsuarioDto {
     chavepix:string
 
     @ApiProperty({
-        example: '77.877.238/0001-24',
+        example: '627.572.620-25',
         required: true,
         description: 'CNPJ sem caracteres especial'
     })
