@@ -6,6 +6,7 @@ import { apiReference } from '@scalar/nestjs-api-reference'
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import {  SanitizePipe } from './shared/pipe/sanatize.pipe';
+import { RequestFormatInterceptor } from './shared/utils/request-format.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -19,6 +20,11 @@ async function bootstrap() {
     new SanitizePipe()
   
   )
+  
+  app.useGlobalInterceptors(
+    new RequestFormatInterceptor()
+  )
+
   app.enableCors({
     origin: ['*'],
     
@@ -41,9 +47,10 @@ async function bootstrap() {
         content: document,
       },
       darkMode:true,
-      theme: 'bluePlanet',
+      theme: 'solarized',
       layout: 'modern',
-      hideModels: true
+      hideModels: true,
+      hideDownloadButton:true
     }),
   )
  

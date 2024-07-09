@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { Auth } from './features/auth/entities/auth.entity';
 import { AuthModule } from './features/auth/auth.module';
 import { Empresa } from './features/empresa/entities/empresa.entity';
@@ -14,6 +14,7 @@ import { EmpresaModule } from './features/empresa/empresa.module';
 import { PedidoModule } from './features/pedido/pedido.module';
 import { ExportacaoModule } from './features/exportacao/exportacao.module';
 import { DashboardsModule } from './dashboards/dashboards.module';
+import { RequestFormatInterceptor } from './shared/utils/request-format.interceptor';
 
 
 @Module({
@@ -47,7 +48,8 @@ import { DashboardsModule } from './dashboards/dashboards.module';
   ],
   controllers: [AppController],
   providers: [AppService,
-    {provide: APP_GUARD, useClass: ThrottlerGuard}
+    {provide: APP_GUARD, useClass: ThrottlerGuard},
+    {provide: APP_INTERCEPTOR, useClass:RequestFormatInterceptor}
   ],
 })
 export class AppModule {}
