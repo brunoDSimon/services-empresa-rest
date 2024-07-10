@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { Auth } from './entities/auth.entity';
@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticationDto } from './dto/authentication-dto';
+import { AuthGuard } from 'src/shared/guards/auth/auth.guard';
 
 @Injectable()
 export class AuthService {
@@ -62,6 +63,7 @@ export class AuthService {
   }
 
   async createToken(auth: Auth) {
+    console.log(auth)
     return{
       acessToken: this.jwtService.sign({
         id: auth.id,
@@ -76,11 +78,10 @@ export class AuthService {
     }
   }
 
-  checkToken(token) { 
+  async checkToken(token) { 
     try {
-        return this.jwtService.verifyAsync(token, {
-            issuer: "API TESTE"
-         })
+      let valid = await this.jwtService.verifyAsync(token, {issuer: "API TESTE"})
+      return valid
     } catch (error) {
         throw new UnauthorizedException()
     }

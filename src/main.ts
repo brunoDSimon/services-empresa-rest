@@ -18,7 +18,7 @@ async function bootstrap() {
   app.setViewEngine('ejs');
   app.useGlobalPipes(
     new ValidationPipe(), 
-    new SanitizePipe()
+    // new SanitizePipe()
   
   )
   app.useGlobalFilters(
@@ -37,12 +37,19 @@ async function bootstrap() {
   const config = new DocumentBuilder()
   .setTitle('exemple ')
   .setVersion('1.0')
-  .build();
-
+  .addBearerAuth(
+    { 
+      type: 'http', 
+      scheme: 'bearer', 
+      bearerFormat: 'JWT' 
+    },
+    'access-token',
+  )
+  .build()
+  
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
-  const OpenApiSpecification =
-  /* … */
+  
 
   app.use(
     '/reference',
