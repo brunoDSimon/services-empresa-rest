@@ -63,7 +63,8 @@ async function bootstrap() {
       theme: 'solarized',
       layout: 'modern',
       hideModels: true,
-      hideDownloadButton:true
+      hideDownloadButton:true,
+      isEditable: true,
     }),
   )
  

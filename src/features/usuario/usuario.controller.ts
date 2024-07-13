@@ -40,19 +40,19 @@ export class UsuarioController {
 
   @Get(':id')
   @ApiBearerAuth('access-token')
-  findOne(@Param('id') id: string) {
+  findOne(@QueryRequired('id') id: string,) {
     return this.usuarioService.findOne(+id);
   }
 
   @Patch(':id')
   @ApiBearerAuth('access-token')
-  update(@Param('id') id: string, @Body() updateUsuarioDto: UpdateUsuarioDto) {
+  update(@QueryRequired('id') id: string, @Body() updateUsuarioDto: UpdateUsuarioDto) {
     return this.usuarioService.update(+id, updateUsuarioDto);
   }
 
   @Delete(':id')
   @ApiBearerAuth('access-token')
-  remove(@Param('id') id: string) {
+  remove(@QueryRequired('id') id: string,) {
     return this.usuarioService.remove(+id);
   }
 }

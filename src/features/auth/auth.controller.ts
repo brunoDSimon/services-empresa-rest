@@ -9,6 +9,7 @@ import { SanitizePipe } from 'src/shared/pipe/sanatize.pipe';
 import { AuthGuard } from 'src/shared/guards/auth/auth.guard';
 import { PublicGuardGuard } from 'src/shared/guards/public-guard.guard';
 import { Public } from 'src/shared/decorators/public-routes.decorator';
+import { QueryRequired } from 'src/shared/decorators/queryRequired';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -28,17 +29,17 @@ export class AuthController {
   }
   @ApiBearerAuth('access-token')
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@QueryRequired('id') id: string,) {
     return this.authService.findOne(+id);
   }
 
   // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
+  // update(@QueryRequired('id') id: string,, @Body() updateAuthDto: UpdateAuthDto) {
   //   return this.authService.update(+id, updateAuthDto);
   // }
 
   // @Delete(':id')
-  // remove(@Param('id') id: string) {
+  // remove(@QueryRequired('id') id: string,) {
   //   return this.authService.remove(+id);
   // }
 

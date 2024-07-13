@@ -39,6 +39,9 @@ export class EmpresaService {
   }
 
   async findOne(id: number) {
+    if(!id) {
+      throw new BadRequestException()
+    }
     let empresa = await this.empresaRepository.findOne({
       where: {id:id}
     })

@@ -4,6 +4,8 @@ import { UpdateEmpresaDto } from './dto/update-empresa.dto';
 import { ApiBearerAuth, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { EmpresaService } from './empresa.service';
 import { QueryRequired } from 'src/shared/decorators/queryRequired';
+import { PageDTO } from 'src/shared/utils/pageDTO';
+import { LimitiDTO } from 'src/shared/utils/limitDTO';
 
 
 @ApiTags('empresas')
@@ -38,19 +40,7 @@ export class EmpresaController {
       ]
     }
   })
-  @ApiQuery({
-    name: 'page',
-    required:true,
-    example: 0,
-    type:'number',
-    
-    })
-  @ApiQuery({
-    name: 'limit',
-    required:true,
-    example: 10,
-    type:'number',
-    })
+  @ApiQuery({type: PageDTO})
   findAll(
     @QueryRequired('page', new DefaultValuePipe(0)) page: number = 0,
     @QueryRequired('limit', new DefaultValuePipe(10)) limit: number = 10,
@@ -60,19 +50,23 @@ export class EmpresaController {
 
   @Get(':id')
   @ApiBearerAuth('access-token')
-  findOne(@Param('id') id: string) {
+  findOne(
+    @QueryRequired('id') id: string,
+  ) {
     return this.empresaService.findOne(+id);
   }
 
   @Patch(':id')
   @ApiBearerAuth('access-token')
-  update(@Param('id') id: string, @Body() updateEmpresaDto: UpdateEmpresaDto) {
+  update(@QueryRequired('id') id: string, @Body() updateEmpresaDto: UpdateEmpresaDto) {
     return this.empresaService.update(+id, updateEmpresaDto);
   }
 
   @Delete(':id')
   @ApiBearerAuth('access-token')
-  remove(@Param('id') id: string) {
+  remove(
+    @QueryRequired('id') id: string,
+  ) {
     return this.empresaService.remove(+id);
   }
 }
