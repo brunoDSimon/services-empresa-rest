@@ -1,13 +1,14 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference'
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import {  SanitizePipe } from './shared/pipe/sanatize.pipe';
 import { RequestFormatInterceptor } from './shared/utils/request-format.interceptor';
 import { AllExceptionsFilter } from './shared/utils/all-exceptions/all-exceptions.filter';
+import { AuthGuard } from './shared/guards/auth/auth.guard';
+import { AuthService } from './features/auth/auth.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -28,6 +29,11 @@ async function bootstrap() {
   app.useGlobalInterceptors(
     new RequestFormatInterceptor()
   )
+  const reflector = app.get(Reflector);
+  const authService = app.get(AuthService);
+  app.useGlobalGuards(
+    new AuthGuard(reflector, authService)
+   )
 
   app.enableCors({
     origin: ['*'],
@@ -38,12 +44,8 @@ async function bootstrap() {
   .setTitle('exemple ')
   .setVersion('1.0')
   .addBearerAuth(
-    { 
-      type: 'http', 
-      scheme: 'bearer', 
-      bearerFormat: 'JWT' 
-    },
-    'access-token',
+    { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+    'access-token', // This is the name of the security scheme
   )
   .build()
   

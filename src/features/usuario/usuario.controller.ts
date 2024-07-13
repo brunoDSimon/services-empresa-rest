@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, DefaultValuePipe } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UsuarioService } from './usuario.service';
 import { QueryRequired } from 'src/shared/decorators/queryRequired';
 
@@ -11,6 +11,7 @@ export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
   create(@Body() createUsuarioDto: CreateUsuarioDto) {
     return this.usuarioService.create(createUsuarioDto);
   }
@@ -29,6 +30,7 @@ export class UsuarioController {
     type:'number',
     })
   @Get()
+  @ApiBearerAuth('access-token')
   findAll(
     @QueryRequired('page', new DefaultValuePipe(0)) page: number = 0,
     @QueryRequired('limit', new DefaultValuePipe(10)) limit: number = 10,
@@ -37,16 +39,19 @@ export class UsuarioController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('access-token')
   findOne(@Param('id') id: string) {
     return this.usuarioService.findOne(+id);
   }
 
   @Patch(':id')
+  @ApiBearerAuth('access-token')
   update(@Param('id') id: string, @Body() updateUsuarioDto: UpdateUsuarioDto) {
     return this.usuarioService.update(+id, updateUsuarioDto);
   }
 
   @Delete(':id')
+  @ApiBearerAuth('access-token')
   remove(@Param('id') id: string) {
     return this.usuarioService.remove(+id);
   }

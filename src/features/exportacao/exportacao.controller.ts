@@ -1,6 +1,6 @@
 import { BadRequestException, Controller, DefaultValuePipe, Get, Res, StreamableFile } from '@nestjs/common';
 import { ExportacaoService } from './exportacao.service';
-import { ApiHeader, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { Response } from 'express';
@@ -13,6 +13,7 @@ export class ExportacaoController {
 
 
   @Get('empresa/pdf')
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     type:'file'
   })
@@ -49,6 +50,7 @@ export class ExportacaoController {
   }
 
   @Get('empresa/csv')
+  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Baixar CSV de fechamento de mês' })
   @ApiResponse({
     type:'file'
@@ -90,7 +92,8 @@ export class ExportacaoController {
 
 
 
-  @Get('empresa/xlsx') 
+  @Get('empresa/xlsx')
+  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Baixar Excel de fechamento de mês' })
   @ApiResponse({
     type:'file'
@@ -133,6 +136,7 @@ export class ExportacaoController {
 
 
   @Get('query') 
+  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Query com dados de retorno' })
   teste() {
     return this.exportacaoService.query(1, "2024-04-01 00:00:00", "2024-04-19 23:59:59")

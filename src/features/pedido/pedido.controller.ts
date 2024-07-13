@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, DefaultValuePipe, ParseIntPipe } from '@nestjs/common';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
-import { ApiOkResponse, ApiQuery, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiQuery, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { PedidoService } from './pedido.service';
 import { Pedido } from './entities/pedido.entity';
 import { query } from 'express';
@@ -15,6 +15,7 @@ export class PedidoController {
   ) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
   @ApiOkResponse({
    schema: {
     example:{
@@ -37,6 +38,7 @@ export class PedidoController {
   }
 
   @Get()
+  @ApiBearerAuth('access-token')
   @ApiOkResponse({
     schema: {
       example: [{
@@ -90,16 +92,19 @@ export class PedidoController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('access-token')
   findOne(@Param('id') id: string) {
     return this.pedidoService.findOne(+id);
   }
 
   @Patch(':id')
+  @ApiBearerAuth('access-token')
   update(@Param('id') id: string, @Body() updatePedidoDto: UpdatePedidoDto) {
     return this.pedidoService.update(+id, updatePedidoDto);
   }
 
   @Delete(':id')
+  @ApiBearerAuth('access-token')
   remove(@Param('id') id: string) {
     return this.pedidoService.remove(+id);
   }

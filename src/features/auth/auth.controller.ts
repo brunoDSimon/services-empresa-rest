@@ -3,10 +3,12 @@ import { response, Response } from 'express';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthenticationDto } from './dto/authentication-dto';
 import { SanitizePipe } from 'src/shared/pipe/sanatize.pipe';
 import { AuthGuard } from 'src/shared/guards/auth/auth.guard';
+import { PublicGuardGuard } from 'src/shared/guards/public-guard.guard';
+import { Public } from 'src/shared/decorators/public-routes.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -14,16 +16,17 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
   create(@Body() createAuthDto: CreateAuthDto) {
     return this.authService.create(createAuthDto);
   }
 
   @Get()
-  @UseGuards(AuthGuard)
+  @ApiBearerAuth('access-token')
   findAll() {
     return this.authService.findAll();
   }
-
+  @ApiBearerAuth('access-token')
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.authService.findOne(+id);
@@ -39,6 +42,7 @@ export class AuthController {
   //   return this.authService.remove(+id);
   // }
 
+  @Public()
   @ApiBody({type:AuthenticationDto})
   @Post('authentication')
   authentication(@Body() authenticationDto: AuthenticationDto) {

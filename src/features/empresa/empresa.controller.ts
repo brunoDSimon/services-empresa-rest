@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, DefaultValuePipe, Query } from '@nestjs/common';
 import { CreateEmpresaDto } from './dto/create-empresa.dto';
 import { UpdateEmpresaDto } from './dto/update-empresa.dto';
-import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { EmpresaService } from './empresa.service';
 import { QueryRequired } from 'src/shared/decorators/queryRequired';
 
@@ -12,11 +12,13 @@ export class EmpresaController {
   constructor(private readonly empresaService: EmpresaService) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
   create(@Body() createEmpresaDto: CreateEmpresaDto) {
     return this.empresaService.create(createEmpresaDto);
   }
 
   @Get()
+  @ApiBearerAuth('access-token')
   @ApiOkResponse({
     schema:{
       example: [
@@ -57,16 +59,19 @@ export class EmpresaController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('access-token')
   findOne(@Param('id') id: string) {
     return this.empresaService.findOne(+id);
   }
 
   @Patch(':id')
+  @ApiBearerAuth('access-token')
   update(@Param('id') id: string, @Body() updateEmpresaDto: UpdateEmpresaDto) {
     return this.empresaService.update(+id, updateEmpresaDto);
   }
 
   @Delete(':id')
+  @ApiBearerAuth('access-token')
   remove(@Param('id') id: string) {
     return this.empresaService.remove(+id);
   }
