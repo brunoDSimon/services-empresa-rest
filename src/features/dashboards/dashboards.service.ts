@@ -1,26 +1,42 @@
-import { Injectable } from '@nestjs/common';
-import { CreateDashboardDto } from './dto/create-dashboard.dto';
-import { UpdateDashboardDto } from './dto/update-dashboard.dto';
-
+import {  Injectable } from '@nestjs/common';
+import { EmpresaService } from '../empresa/empresa.service';
+import { UsuarioService } from '../usuario/usuario.service';
+import { Pedido } from '../pedido/entities/pedido.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import moment from 'moment';
+const momentTimezone = require('moment-timezone');
 @Injectable()
 export class DashboardsService {
-  create(createDashboardDto: CreateDashboardDto) {
-    return 'This action adds a new dashboard';
+  constructor(
+    @InjectRepository(Pedido)
+    private pedidoRepository: Repository<Pedido>,
+    private readonly usuarioService: UsuarioService,
+    private readonly empresaService: EmpresaService,
+  ) {
+
   }
 
-  findAll() {
-    return `This action returns all dashboards`;
+  async convertDate(dataInicial, dataFinal) {
+    const dateI = new Date(`${dataInicial}T00:00:00`);
+    const dateF = new Date(`${dataFinal}T23:59:59`);
+    return { dateI, dateF };
   }
+  
 
-  findOne(id: number) {
-    return `This action returns a #${id} dashboard`;
-  }
+  public async  consultarValorGanhoMes(dataInicial, dataFinal, apenasFechados: boolean = false) {
+    const dates = await this.convertDate(dataInicial, dataFinal);
+    let type = apenasFechados ? 'IS NOT NULL' : 'IS NULL';
+    let query = `
+      SELECT sum(pedido.valor * pedido.quantidade) AS valorTotal,
+            sum(pedido.quantidade) AS quantidade
+      FROM pedido
+      WHERE pedido.createdAt BETWEEN ? AND ?
+        AND pedido.dataFinalizacao ${type};
+    `;
+    const rawData = await this.pedidoRepository.query(query, [dates.dateI, dates.dateF]);
+    console.log(rawData);
 
-  update(id: number, updateDashboardDto: UpdateDashboardDto) {
-    return `This action updates a #${id} dashboard`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} dashboard`;
+    return rawData;
   }
 }
