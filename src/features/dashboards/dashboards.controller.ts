@@ -62,4 +62,34 @@ export class DashboardsController {
   ) {
     return this.dashboardsService.consultarValorGanhoMes(dataInicial,dataFinal,apenasFechado)
   }
+
+  @ApiOkResponse({
+    schema: {
+      example:{
+        "status": 1,
+        "message": "Requisição efetuada com sucesso",
+        "data": [
+          {
+            "valorTotal": "295.00",
+            "name": "Empresa teste"
+          },
+          {
+            "valorTotal": "306.99",
+            "name": "Luciana e Gustavo Limpeza ME"
+          }
+        ]
+      }
+    }
+  })
+  @Get('total-empresa')
+  @ApiBearerAuth('access-token')
+  @ApiQuery({type: dataValidatorsDTO})
+  public totalValoresTotaisPorEmpresa(
+    @QueryRequired('dataInicial') dataInicial: string,
+    @QueryRequired('dataFinal') dataFinal: string,
+    @Query('apenasFechado') apenasFechado: boolean = false
+  ) {
+    return this.dashboardsService.consultaValoresGanhoPorEmpresa(dataInicial,dataFinal,apenasFechado)
+  }
+
 }
