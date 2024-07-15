@@ -92,8 +92,8 @@ export class DashboardsService {
     ON 
       pedido.empresaId = empresa.id
     WHERE 
-      pedido.createdAt BETWEEN '2024-01-01 00:00:00' AND '2024-12-31 23:59:59' 
-      AND pedido.dataFinalizacao IS NULL 
+      pedido.createdAt BETWEEN ? AND ? 
+      AND pedido.dataFinalizacao ${type}
     GROUP BY 
       empresa.name, extract(month FROM pedido.createdAt) ;
     `

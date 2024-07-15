@@ -95,6 +95,115 @@ export class DashboardsController {
 
   @Get('total-empresa-mes')
   @ApiBearerAuth('access-token')
+  @ApiOkResponse({
+    schema: {
+      example: {
+        "status": 1,
+        "message": "Requisição efetuada com sucesso",
+        "data": [
+          {
+            "mes": 1,
+            "label": "Janeiro",
+            "items": []
+          },
+          {
+            "mes": 2,
+            "label": "Fevereiro",
+            "items": []
+          },
+          {
+            "mes": 3,
+            "label": "Março",
+            "items": []
+          },
+          {
+            "mes": 4,
+            "label": "Abril",
+            "items": []
+          },
+          {
+            "mes": 5,
+            "label": "Maio",
+            "items": []
+          },
+          {
+            "mes": 6,
+            "label": "Junho",
+            "items": []
+          },
+          {
+            "mes": 7,
+            "label": "Julho",
+            "items": [
+              {
+                "valorTotal": "295.00",
+                "name": "Empresa teste",
+                "mes": 7
+              },
+              {
+                "valorTotal": "306.99",
+                "name": "Luciana e Gustavo Limpeza ME",
+                "mes": 7
+              }
+            ]
+          },
+          {
+            "mes": 8,
+            "label": "Agosto",
+            "items": []
+          },
+          {
+            "mes": 9,
+            "label": "Setembro",
+            "items": []
+          },
+          {
+            "mes": 10,
+            "label": "Outubro",
+            "items": []
+          },
+          {
+            "mes": 11,
+            "label": "Novembro",
+            "items": []
+          },
+          {
+            "mes": 12,
+            "label": "Dezembro",
+            "items": []
+          }
+        ]
+      }
+    }
+  })
+  @ApiUnauthorizedResponse({
+    schema: {
+      example: {
+        "statusCode": 403,
+        "timestamp": "2024-07-14T14:00:52.486Z",
+        "path": "/dashboards/total-empresa-mes?dataInicial=2024-01-01&dataFinal=2024-12-31",
+        "message": {
+          "message": "Forbidden resource",
+          "error": "Forbidden",
+          "statusCode": 403
+        }
+      }
+    }
+  })
+  @ApiBadRequestResponse({
+    schema: {
+      example: {
+        "statusCode": 400,
+        "timestamp": "2024-07-14T14:02:00.396Z",
+        "path": "/dashboards/total-empresa-mes?dataFinal=2024-12-31",
+        "message": {
+          "message": "Missing required query param: 'dataInicial'",
+          "error": "Bad Request",
+          "statusCode": 400
+        }
+      }
+    }
+  })
   @ApiQuery({type: dataValidatorsDTO})
   public totalValoresTotaisPorEmpresaMes(
     @QueryRequired('dataInicial') dataInicial: string,
