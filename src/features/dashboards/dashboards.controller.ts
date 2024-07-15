@@ -92,4 +92,17 @@ export class DashboardsController {
     return this.dashboardsService.consultaValoresGanhoPorEmpresa(dataInicial,dataFinal,apenasFechado)
   }
 
+
+  @Get('total-empresa-mes')
+  @ApiBearerAuth('access-token')
+  @ApiQuery({type: dataValidatorsDTO})
+  public totalValoresTotaisPorEmpresaMes(
+    @QueryRequired('dataInicial') dataInicial: string,
+    @QueryRequired('dataFinal') dataFinal: string,
+    @Query('apenasFechado') apenasFechado: boolean = false
+  ) {
+    return this.dashboardsService.consultaValoresGanhoPorEmpresaPorMes(dataInicial,dataFinal,apenasFechado)
+  }
+
+
 }

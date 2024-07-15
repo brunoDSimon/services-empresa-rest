@@ -76,4 +76,51 @@ export class DashboardsService {
   }
 
 
+  public async consultaValoresGanhoPorEmpresaPorMes(dataInicial, dataFinal, apenasFechados: boolean = false) {
+    const dates = await this.convertDate(dataInicial, dataFinal);
+    let type = apenasFechados ? 'IS NOT NULL' : 'IS NULL';
+
+    let query = `
+    SELECT 
+      SUM(pedido.valor * pedido.quantidade) AS valorTotal, 
+      empresa.name,
+      extract(month FROM pedido.createdAt) as mes
+    FROM 
+      pedido 
+    INNER JOIN 
+      empresa 
+    ON 
+      pedido.empresaId = empresa.id
+    WHERE 
+      pedido.createdAt BETWEEN '2024-01-01 00:00:00' AND '2024-12-31 23:59:59' 
+      AND pedido.dataFinalizacao IS NULL 
+    GROUP BY 
+      empresa.name, extract(month FROM pedido.createdAt) ;
+    `
+    try {
+      const rawData = await this.pedidoRepository.query(query, [dates.dateI, dates.dateF]);
+      
+      return this.tratarLista(rawData);
+
+    } catch (error) {
+      throw new InternalServerErrorException()
+    }
+  }
+
+
+  public tratarLista(response: any) {
+    let dados: any = Object.values(JSON.parse(JSON.stringify(response)))
+    const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    let map = []
+    for (let index = 0; index < 12; index++) {
+      map.push({mes:index +1, label:meses[index] },); 
+    }
+   
+    map.forEach((element, index) => {
+      let mesesIguais = dados.filter(t => t.mes == element.mes)
+      element[`items`] = mesesIguais.length >0 ? mesesIguais : []
+    
+    })
+    return map
+  }
 }
