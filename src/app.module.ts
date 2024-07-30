@@ -21,11 +21,11 @@ import { DashboardsModule } from './features/dashboards/dashboards.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: `localhost`,
-      username: `root`, 
+      host: `db`,
+      username: `dbproducao`, 
       port: 3306,
       database:`empresa`,
-      password: "root",
+      password: "testing@123",
       maxQueryExecutionTime:3000,
       autoLoadEntities: true,
       entities: [Auth, Empresa, Pedido, Usuario],

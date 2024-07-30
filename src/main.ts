@@ -50,7 +50,7 @@ async function bootstrap() {
   .build()
   
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+  SwaggerModule.setup(' ', app, document);
   
 
   app.use(

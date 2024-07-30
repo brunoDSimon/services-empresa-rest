@@ -1,3 +1,11 @@
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+
+CREATE USER 'dbproducao'@'%' IDENTIFIED BY 'testing@123';
+GRANT ALL PRIVILEGES ON empresa.* TO 'dbproducao'@'%';
+FLUSH PRIVILEGES;
+
+
 create database empresa;
 
 use empresa;
@@ -35,21 +43,6 @@ GROUP BY
     
 #somar por mes de cada empresa
 
-SELECT 
-    SUM(pedido.valor * pedido.quantidade) AS valorTotal, 
-    empresa.name,
-    extract(month FROM pedido.createdAt) as mes
-FROM 
-    pedido 
-INNER JOIN 
-    empresa 
-ON 
-    pedido.empresaId = empresa.id
-WHERE 
-    pedido.createdAt BETWEEN '2024-01-01 00:00:00' AND '2024-12-31 23:59:59' 
-    AND pedido.dataFinalizacao IS NULL 
-GROUP BY 
-    empresa.name, extract(month FROM pedido.createdAt) ;
     
     
     
